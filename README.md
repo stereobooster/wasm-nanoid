@@ -1,6 +1,6 @@
 # wasm-nanoid
 
-Tutorial for your first wasm package.
+Tutorial for your first wasm npm package (for browser).
 
 ```sh
 docker run -v "$PWD":/usr/src/myapp -w /usr/src/myapp --rm --interactive --tty stereobooster/rust-wasm
@@ -33,10 +33,12 @@ pkg/*
 
 Commit (you may want to do this in different terminal, because git inside Docker is not configured).
 
-```
+```sh
 git add .
 git commit -m "initial commit"
 ```
+
+## Implement
 
 I want to build simple thing, so I will reuse existing Nano ID package (they call it crate in Rust).
 
@@ -49,7 +51,7 @@ nanoid = "0.2.0"
 
 Edit `src/lib.rs`:
 
-```rust
+```rs
 extern crate cfg_if;
 extern crate wasm_bindgen;
 extern crate js_sys;
@@ -67,13 +69,55 @@ pub fn simpleNanoid() -> js_sys::JsString {
 }
 ```
 
-Run (in docker shell)
+To build run in docker shell:
 
 ```sh
 wasm-pack init
 ```
 
-Run (in native shell, where you npm is configured)
+## Setup testing environment
+
+run in OS shell
+
+```
+npm init wasm-app example
+```
+
+create `package.json` in the root:
+
+```json
+{
+  "private": true,
+  "workspaces": ["*"]
+}
+```
+
+Edit `.gitignore`:
+
+```
+node_modules
+```
+
+Edit `example/package.json`:
+
+```js
+"devDependencies": {
+  "wasm-nanoid": "^0.1.0",
+  ...
+}
+```
+
+Now run example:
+
+```sh
+cd example
+yarn
+yarn start
+```
+
+## Publish
+
+If you want to publish run in OS shell, where your npm credentials are configured:
 
 ```sh
 cd pkg
